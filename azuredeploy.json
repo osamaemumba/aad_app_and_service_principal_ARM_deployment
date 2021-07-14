@@ -36,7 +36,9 @@
         "templatelink": {
           "uri": "[uri(variables('_artifactsLocation'), concat('nestedtemplates/role_assignment.json'))]"
         },
-        "parameters": {}
+        "parameters": {
+          "principalId": "[reference('userManagedIdentity').outputs.principalId.value]"
+        }
       }
     },
     {
