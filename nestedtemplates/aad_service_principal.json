@@ -1,0 +1,50 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "utcValue": {
+        "type": "string",
+        "defaultValue": "[utcNow()]"
+      }
+    },
+    "variables": {},
+    "resources": [
+      {
+        "type": "Microsoft.Resources/deploymentScripts",
+        "apiVersion": "2020-10-01",
+        "name": "createAzureActiveDirectoryApp",
+        "location": "[resourceGroup().location]",
+        "kind": "AzurePowerShell",
+        "dependsOn": [],
+        "identity": {
+          "type": "UserAssigned",
+          "userAssignedIdentities": {
+            "[resourceID('Microsoft.ManagedIdentity/userAssignedIdentities', 'dsId')]": {}
+          }
+        },
+        "properties": {
+          "forceUpdateTag": "[parameters('utcValue')]",
+          "azPowerShellVersion": "5.0",
+          "arguments": "[concat('-appName', ' ', concat('\\\"', 'newApp',uniquestring(resourceGroup().id), '\\\"'), ' ', '-subscriptionName', ' ', concat('\\\"', subscription().displayName, '\\\"'))]",
+          "scriptContent": "Install-Module -Name \"Az.Accounts\" -Force\n\rConnect-AzAccount -Identity\n\rImport-Module Az.Resources\n\r$ServicePrincipal = New-AzADServicePrincipal\n\r$bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($ServicePrincipal.Secret)\n\r$appClientSecret =[System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)\n\r$tenantID = (Get-AzSubscription -SubscriptionName $subscriptionName).TenantId\n\r$appClientID = $ServicePrincipal.ApplicationId\n\r$DeploymentScriptOutputs = @{}\n\r$DeploymentScriptOutputs['tenantID'] = $tenantID\n\r$DeploymentScriptOutputs['appClientID'] = $appClientID\n\r$DeploymentScriptOutputs['appClientSecret'] = $appClientSecret",
+          "timeout": "PT1H",
+          "cleanupPreference": "OnSuccess",
+          "retentionInterval": "P1D"
+        }
+      }
+    ],
+    "outputs": {
+      "tenantID": {
+        "value": "[reference('createAzureActiveDirectoryApp').outputs.tenantID]",
+        "type": "string"
+      },
+      "appClientID": {
+        "value": "[reference('createAzureActiveDirectoryApp').outputs.appClientID]",
+        "type": "string"
+      },
+      "appClientSecret": {
+        "value": "[reference('createAzureActiveDirectoryApp').outputs.appClientSecret]",
+        "type": "string"
+      }
+    }
+  }

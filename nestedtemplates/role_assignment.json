@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {},
+  "variables": {
+    "dsRoleAssignmentId": "[guid(subscription().id, variables('dsRoleDefinitionId'), resourceId('Microsoft.ManagedIdentity/identities', variables('dsIdentityName')))]",
+    "dsRoleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2018-09-01-preview",
+      "name": "[variables('dsRoleAssignmentId')]",
+      "properties": {
+        "roleDefinitionId": "[variables('dsRoleDefinitionId')]",
+        "principalId": "[reference(variables('identityDeploymentName')).outputs.principalId.value]",
+        "scope": "[subscription().id]",
+        "principalType": "ServicePrincipal"
+      }
+    }
+  ],
+  "outputs": {
+    "principalId": {
+      "value": "[reference(variables('dsIdentityName')).principalId]",
+      "type": "string"
+    }
+  }
+}

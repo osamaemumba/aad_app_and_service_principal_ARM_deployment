@@ -1,0 +1,62 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "utcValue": {
+        "type": "string",
+        "defaultValue": "[utcNow()]"
+      }
+    },
+    "variables": {
+        "_artifactsLocation": "[deployment().properties.templatelink.uri]"
+    },
+    "resources": [ 
+        {
+        "name": "userManagedIdentity",
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2018-05-01",
+        "dependsOn": [],
+        "properties": {
+          "mode": "Incremental",
+          "templatelink": {
+            "uri": "[uri(variables('_artifactsLocation'), concat('nestedtemplates/user_managed_identity.json'))]"
+          },
+          "parameters": {}
+        }
+      },
+      {
+        "name": "roleAssignment",
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2018-05-01",
+        "dependsOn": [
+            "[resourceId('Microsoft.Resources/deployments','userManagedIdentity')]"
+        ],
+        "properties": {
+          "mode": "Incremental",
+          "templatelink": {
+            "uri": "[uri(variables('_artifactsLocation'), concat('nestedtemplates/role_assignment.json'))]"
+          },
+          "parameters": {}
+        }
+      },
+      {
+        "name": "keyVaultDeployment",
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2018-05-01",
+        "dependsOn": [
+          "[resourceId('Microsoft.Storage/storageAccounts', variables('dlsName'))]"
+        ],
+        "properties": {
+          "mode": "Incremental",
+          "templatelink": {
+            "uri": "[uri(variables('_artifactsLocation'), concat('nestedtemplates/aad_service_principal.json'))]"
+          },
+          "parameters": {
+              "utcValue": {
+                  "value": "[parameters('utcValue')]"
+              }
+          }
+        }
+      }
+    ]
+  }
