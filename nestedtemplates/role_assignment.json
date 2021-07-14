@@ -14,16 +14,10 @@
       "name": "[variables('dsRoleAssignmentId')]",
       "properties": {
         "roleDefinitionId": "[variables('dsRoleDefinitionId')]",
-        "principalId": "[reference(variables('identityDeploymentName')).outputs.principalId.value]",
+        "principalId": "[reference(variables('userManagedIdentity')).outputs.principalId.value]",
         "scope": "[subscription().id]",
         "principalType": "ServicePrincipal"
       }
     }
-  ],
-  "outputs": {
-    "principalId": {
-      "value": "[reference(variables('dsIdentityName')).principalId]",
-      "type": "string"
-    }
-  }
+  ]
 }
