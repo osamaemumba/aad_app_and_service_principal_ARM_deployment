@@ -37,7 +37,9 @@
           "uri": "[uri(variables('_artifactsLocation'), concat('nestedtemplates/role_assignment.json'))]"
         },
         "parameters": {
-          "principalId": "[reference('userManagedIdentity').outputs.principalId.value]"
+          "principalId": {
+              "value": "[reference('userManagedIdentity').outputs.principalId.value]"
+          }
         }
       }
     },
