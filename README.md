@@ -1,0 +1,1 @@
+# aad_app_and_service_principal_ARM_deployment
