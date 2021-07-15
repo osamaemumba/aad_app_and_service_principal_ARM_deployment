@@ -30,7 +30,9 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2018-05-01",
       "resourceGroup": "[parameters('resourceGroup')]",
-      "dependsOn": [],
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/resourceGroups', parameters('resourceGroup'))]"
+      ],
       "properties": {
         "mode": "Incremental",
         "templatelink": {
