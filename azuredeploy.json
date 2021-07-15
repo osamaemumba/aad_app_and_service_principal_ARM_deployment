@@ -14,9 +14,7 @@
       "defaultValue": "eastus"
     }
   },
-  "variables": {
-      "_artifactsLocation": "[deployment().properties.templatelink.uri]"
-  },
+  "variables": {},
   "resources": [ 
     {
       "type": "Microsoft.Resources/resourceGroups",
