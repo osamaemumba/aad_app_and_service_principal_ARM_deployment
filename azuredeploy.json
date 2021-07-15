@@ -47,6 +47,7 @@
       "name": "roleAssignment",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2018-05-01",
+      "location": "[parameters('location')]",
       "dependsOn": [
           "[resourceId('Microsoft.Resources/deployments','userManagedIdentity')]"
       ],
@@ -58,10 +59,7 @@
         "parameters": {
           "principalId": {
               "value": "[reference('userManagedIdentity').outputs.principalId.value]"
-          },
-          "location": {
-            "value": "[parameters('location')]"
-        }
+          }
         }
       }
     },

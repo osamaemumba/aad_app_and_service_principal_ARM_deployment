@@ -4,9 +4,6 @@
   "parameters": {
     "principalId":{
         "type": "string"
-      },
-      "location": {
-        "type": "string"
       }
   },
   "variables": {
@@ -18,7 +15,6 @@
     {
       "type": "Microsoft.Authorization/roleAssignments",
       "apiVersion": "2018-09-01-preview",
-      "location": "[parameters('location')]",
       "name": "[variables('dsRoleAssignmentId')]",
       "properties": {
         "roleDefinitionId": "[variables('dsRoleDefinitionId')]",
