@@ -5,6 +5,9 @@
       "utcValue": {
         "type": "string",
         "defaultValue": "[utcNow()]"
+      },
+      "location": {
+        "type": "string"
       }
     },
     "variables": {},

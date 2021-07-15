@@ -1,27 +1,46 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "utcValue": {
       "type": "string",
       "defaultValue": "[utcNow()]"
+    },
+    "resourceGroup": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "eastus"
     }
   },
   "variables": {
       "_artifactsLocation": "[deployment().properties.templatelink.uri]"
   },
   "resources": [ 
-      {
+    {
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2019-10-01",
+      "name": "[parameters('resourceGroup')]",
+      "location": "[parameters('location')]",
+      "properties": {}
+    },
+    {
       "name": "userManagedIdentity",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2018-05-01",
+      "resourceGroup": "[parameters('resourceGroup')]",
       "dependsOn": [],
       "properties": {
         "mode": "Incremental",
         "templatelink": {
           "uri": "[uri(variables('_artifactsLocation'), concat('nestedtemplates/user_managed_identity.json'))]"
         },
-        "parameters": {}
+        "parameters": {
+            "location": {
+                "value": "[parameters('location')]"
+            }
+        }
       }
     },
     {
@@ -47,6 +66,7 @@
       "name": "aadServicePrincipal",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2018-05-01",
+      "resourceGroup": "[parameters('resourceGroup')]",
       "dependsOn": [
           "[resourceId('Microsoft.Resources/deployments','roleAssignment')]"
       ],
@@ -58,6 +78,9 @@
         "parameters": {
             "utcValue": {
                 "value": "[parameters('utcValue')]"
+            },
+            "location": {
+                "value": "[parameters('location')]"
             }
         }
       }
