@@ -36,7 +36,7 @@
       "properties": {
         "mode": "Incremental",
         "templatelink": {
-          "uri": "[uri(variables('_artifactsLocation'), concat('nestedtemplates/user_managed_identity.json'))]"
+          "uri": "https://raw.githubusercontent.com/osamaemumba/aad_app_and_service_principal_ARM_deployment/main/nestedtemplates/user_managed_identity.json"
         },
         "parameters": {
             "location": {
@@ -55,7 +55,7 @@
       "properties": {
         "mode": "Incremental",
         "templatelink": {
-          "uri": "[uri(variables('_artifactsLocation'), concat('nestedtemplates/role_assignment.json'))]"
+          "uri": "https://raw.githubusercontent.com/osamaemumba/aad_app_and_service_principal_ARM_deployment/main/nestedtemplates/role_assignment.json"
         },
         "parameters": {
           "principalId": {
@@ -75,7 +75,7 @@
       "properties": {
         "mode": "Incremental",
         "templatelink": {
-          "uri": "[uri(variables('_artifactsLocation'), concat('nestedtemplates/aad_service_principal.json'))]"
+          "uri": "https://raw.githubusercontent.com/osamaemumba/aad_app_and_service_principal_ARM_deployment/main/nestedtemplates/aad_service_principal.json"
         },
         "parameters": {
             "utcValue": {
