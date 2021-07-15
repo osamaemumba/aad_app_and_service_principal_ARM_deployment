@@ -21,6 +21,10 @@
     "principalId": {
       "value": "[reference(variables('dsIdentityName')).principalId]",
       "type": "string"
+    },
+    "clientId": {
+      "value": "[reference(variables('dsIdentityName')).clientId]",
+      "type": "string"
     }
   }
 }

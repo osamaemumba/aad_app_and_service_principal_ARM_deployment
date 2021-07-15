@@ -48,9 +48,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2018-05-01",
       "location": "[parameters('location')]",
-      "dependsOn": [
-          "[resourceId('Microsoft.Resources/deployments','userManagedIdentity')]"
-      ],
+      "dependsOn": [],
       "properties": {
         "mode": "Incremental",
         "templatelink": {
@@ -82,7 +80,10 @@
             },
             "location": {
                 "value": "[parameters('location')]"
-            }
+            },
+            "userManagedIdentityClientId": {
+              "value": "[reference('userManagedIdentity').outputs.clientId.value]"
+          }
         }
       }
     }
