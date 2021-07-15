@@ -60,7 +60,10 @@
         "parameters": {
           "principalId": {
               "value": "[reference('userManagedIdentity').outputs.principalId.value]"
-          }
+          },
+          "location": {
+            "value": "[parameters('location')]"
+        }
         }
       }
     },

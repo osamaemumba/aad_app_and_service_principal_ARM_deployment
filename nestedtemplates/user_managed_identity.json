@@ -14,7 +14,7 @@
       "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
       "name": "[variables('dsIdentityName')]",
       "apiVersion": "2018-11-30",
-      "location": "[resourceGroup().location]"
+      "location": "[parameters('location')]"
     }
   ],
   "outputs": {
